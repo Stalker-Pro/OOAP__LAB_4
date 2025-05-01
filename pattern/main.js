@@ -53,6 +53,16 @@ class Email {
 	}
 }
 
+// Дополнительный класс для email-сообщений
+class EmailMessage {
+	constructor(email, subject, body) {
+		this.email = email
+		this.subject = subject
+		this.body = body
+		this.sentAt = new Date()
+	}
+}
+
 class SMS {
 	constructor(phoneNumber, text) {
 		if (!/^\+?\d{10,15}$/.test(phoneNumber)) {
@@ -76,16 +86,19 @@ class SMS {
 }
 
 class Employee {
-	constructor(name, baseSalary) {
+	constructor(name, baseSalary, email = null, phone = null) {
 		this.name = name
 		this.baseSalary = new Money(baseSalary, 'USD')
 		this.id = Date.now().toString()
-		// this.email = email // Тип Email
 
 		// Генерируем случайный бонус 5-10%
-		const bonusPercent = 5 + Math.random() * 5 // 5-10%
+		const bonusPercent = 5 + Math.random() * 5
 		const bonusAmount = (baseSalary * bonusPercent) / 100
 		this.bonus = new Money(bonusAmount, 'USD')
+
+		// Добавляем контактные данные
+		this.email = email ? new Email(email) : null
+		this.phone = phone ? phone : null // Можно добавить валидацию телефона
 	}
 
 	// Итоговая зарплата (зарплата + бонус)
@@ -98,8 +111,8 @@ class Management {
 	constructor() {
 		this.accountBalance = new Money(0, 'USD') // Начальный баланс
 		this.employees = []
-		// this.sentEmails = [] // История отправленных email
-		// this.sentSMS = [] // История отправленных SMS
+		this.sentEmails = [] // История отправленных email
+		this.sentSMS = [] // История отправленных SMS
 		this.balanceElement = document.querySelector('.text__money-number')
 		this.employeesContainer = document.querySelector(
 			'.container__added-employers'
@@ -137,25 +150,46 @@ class Management {
 		this.employees.forEach(employee => {
 			const employeeElement = document.createElement('div')
 			employeeElement.className = 'employee-card'
+
+			let contacts = ''
+			if (employee.email) contacts += `Email: ${employee.email.value}<br>`
+			if (employee.phone) contacts += `Телефон: ${employee.phone}`
+
 			employeeElement.innerHTML = `
         <h3>${employee.name}</h3>
-        <p>Зарплата: ${employee.baseSalary.amount.toFixed(2)} ${
-				employee.baseSalary.currency
-			}</p>
-        <p>Бонус: ${employee.bonus.amount.toFixed(2)} ${
-				employee.bonus.currency
-			} 
-          (${(
-						(employee.bonus.amount / employee.baseSalary.amount) *
-						100
-					).toFixed(1)}%)</p>
-        <p class="total-salary">Итого: ${employee.totalSalary.amount.toFixed(
-					2
-				)} ${employee.baseSalary.currency}</p>
+        <p>Зарплата: ${employee.baseSalary.toString()}</p>
+        <p>Бонус: ${employee.bonus.toString()}</p>
+        <p>Итого: ${employee.totalSalary.toString()}</p>
+        ${contacts ? `<div class="contacts">${contacts}</div>` : ''}
       `
+
 			this.employeesContainer.appendChild(employeeElement)
 		})
 	}
+	// renderEmployees() {
+	// 	this.employeesContainer.innerHTML = ''
+	// 	this.employees.forEach(employee => {
+	// 		const employeeElement = document.createElement('div')
+	// 		employeeElement.className = 'employee-card'
+	// 		employeeElement.innerHTML = `
+	//     <h3>${employee.name}</h3>
+	//     <p>Зарплата: ${employee.baseSalary.amount.toFixed(2)} ${
+	// 			employee.baseSalary.currency
+	// 		}</p>
+	//     <p>Бонус: ${employee.bonus.amount.toFixed(2)} ${
+	// 			employee.bonus.currency
+	// 		}
+	//       (${(
+	// 					(employee.bonus.amount / employee.baseSalary.amount) *
+	// 					100
+	// 				).toFixed(1)}%)</p>
+	//     <p class="total-salary">Итого: ${employee.totalSalary.amount.toFixed(
+	// 				2
+	// 			)} ${employee.baseSalary.currency}</p>
+	//   `
+	// 		this.employeesContainer.appendChild(employeeElement)
+	// 	})
+	// }
 
 	// Выплата зарплат всем сотрудникам
 	payOutSalaries() {
@@ -205,13 +239,38 @@ class Management {
 			return
 		}
 
-		// Очищаем предыдущие уведомления
 		this.notificationContainer.innerHTML = ''
 
 		this.employees.forEach(employee => {
 			const message = this.createNotificationMessage(employee)
 			this.displayNotification(employee, message)
+
+			// Отправляем email если есть
+			if (employee.email) {
+				const email = new EmailMessage(
+					employee.email,
+					'Уведомление о зарплате',
+					message
+				)
+				this.sentEmails.push(email)
+			}
+
+			// Отправляем SMS если есть
+			if (employee.phone) {
+				const sms = new SMS(
+					employee.phone,
+					message.substring(0, 160) // Ограничение длины SMS
+				)
+				this.sentSMS.push(sms)
+			}
 		})
+
+		this.logSentNotifications()
+	}
+
+	logSentNotifications() {
+		console.log('Отправленные email:', this.sentEmails)
+		console.log('Отправленные SMS:', this.sentSMS)
 	}
 
 	// Создаем текст уведомления
@@ -272,4 +331,33 @@ document.addEventListener('DOMContentLoaded', () => {
 		.addEventListener('click', () => {
 			management.sendNotifications()
 		})
+})
+
+// обработчик добавления сотрудника
+document.querySelector('.btn__add-employ').addEventListener('click', () => {
+	const nameInput = document.querySelector('input[name="name"]')
+	const salaryInput = document.querySelector('input[name="salary"]')
+	const emailInput = document.querySelector('input[name="email"]')
+	const phoneInput = document.querySelector('input[name="phone"]')
+
+	if (nameInput.value && salaryInput.value) {
+		try {
+			management.addEmployee(
+				nameInput.value.trim(),
+				parseFloat(salaryInput.value),
+				emailInput.value.trim() || null,
+				phoneInput.value.trim() || null
+			)
+
+			// Очищаем поля
+			nameInput.value = ''
+			salaryInput.value = ''
+			emailInput.value = ''
+			phoneInput.value = ''
+		} catch (error) {
+			// alert(`Ошибка: ${error.message}`)
+		}
+	} else {
+		alert('Заполните обязательные поля (имя и зарплата)!')
+	}
 })

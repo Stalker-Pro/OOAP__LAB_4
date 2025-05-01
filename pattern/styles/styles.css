@@ -183,4 +183,12 @@ body {
   cursor: not-allowed;
 }
 
+.contacts {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #ccc;
+  font-size: 0.9em;
+  color: #666;
+}
+
 /*# sourceMappingURL=styles.css.map */
