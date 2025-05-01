@@ -1,0 +1,16 @@
+{
+	"name": "test_js",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"compile:sass": "sass pattern/sass/_main.scss pattern/styles/styles.css -w"
+	},
+	"author": "Andrew",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"live-server": "^1.2.2",
+		"sass": "^1.85.1",
+		"scss": "^0.2.4"
+	}
+}

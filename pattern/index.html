@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>With Abstract Fabric</title>
+		<link rel="stylesheet" href="/pattern/styles/styles.css" />
+		<script defer src="./main.js"></script>
+	</head>
+
+	<body>
+		<div class="balance-widget">
+			<div class="text__money-total">
+				На нашем счету:
+				<div class="text__money-number">0 USD</div>
+			</div>
+			<button id="refreshBalance">Обновить</button>
+		</div>
+
+		<div class="employs">
+			<div class="employes__add-employ">
+				<input type="text" name="name" placeholder="Имя сотрудника" />
+				<input type="number" name="salary" placeholder="Зарплата" />
+				<button class="btn__add-employ">Добавить сотрудника</button>
+			</div>
+		</div>
+
+		<div class="container__added-employers">
+			<!-- Сюда будут добавляться сотрудники -->
+		</div>
+
+		<button class="btn__paySalaries">Выплатить Зарплату</button>
+
+		<button class="btn__sendNotification">Отправить уведомления</button>
+
+		<div class="container__notification">
+			<h3>Сообщения которые получат сотрудники:</h3>
+			<div class="container__notification-employe">
+				<!-- Сюда будут добавляться сообщения -->
+			</div>
+		</div>
+	</body>
+</html>

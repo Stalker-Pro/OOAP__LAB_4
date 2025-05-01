@@ -1,0 +1,190 @@
+const btnOne = document.querySelector('.btn.btn--1')
+const btnRemove = document.querySelector('.btn.btn--2')
+const btnAddBook = document.querySelector('.btn.btn--3')
+const btnContainer = document.querySelector('.containerButton')
+const inputTakeBook = document.querySelector('.input_delete_book')
+
+class Book {
+	constructor(name) {
+		this.name = name
+	}
+}
+
+// class IBookIterator {
+// 	//Проверяет, есть ли следующий элемент (в коллекции)
+// 	hasNext() {}
+
+// 	//Возвращает следующую книгу (из коллекции)
+// 	getNext() {}
+// }ffffff
+
+class Reader {
+	seeBooks(obj) {
+		obj.addEventListener('click', () => {
+			btnContainer.innerHTML = ''
+
+			// массив книг из библиотеки
+			const iterator = library.createNumerator()
+
+			// контейнер для всех книг
+			const booksContainer = document.createElement('div')
+			booksContainer.classList.add('textBook')
+
+			// Перебираем все книги и создаем элементы для каждой
+			while (iterator.hasNext()) {
+				const book = iterator.next() ///111111111111111111111111111
+				const bookElement = document.createElement('div')
+				bookElement.textContent = book.name
+				bookElement.classList.add('textBook')
+				booksContainer.appendChild(bookElement)
+			}
+
+			btnContainer.appendChild(booksContainer)
+		})
+	}
+
+	updateBooks() {
+		btnContainer.innerHTML = ''
+
+		// массив книг из библиотеки
+		const iterator = library.createNumerator()
+
+		// контейнер для всех книг
+		const booksContainer = document.createElement('div')
+		booksContainer.classList.add('textBook')
+
+		// Перебираем все книги
+		while (iterator.hasNext()) {
+			const book = iterator.next() ///11111111111111111111getNext
+			const bookElement = document.createElement('div')
+			bookElement.textContent = book.name
+			bookElement.classList.add('textBook')
+			booksContainer.appendChild(bookElement)
+		}
+
+		btnContainer.appendChild(booksContainer)
+	}
+
+	takeBook(obj) {
+		obj.addEventListener('click', () => {
+			const bookName = inputTakeBook.value.trim()
+
+			if (bookName === '') {
+				alert('Введите название книги для приобретения.')
+				return
+			}
+
+			const isRemoved = library.removeBook(bookName)
+			if (isRemoved) {
+				this.updateBooks()
+				inputTakeBook.value = ''
+			} else {
+				alert(`Книга "${bookName}" не найдена.`)
+			}
+		})
+	}
+
+	returnBook(obj) {
+		obj.addEventListener('click', () => {
+			const bookName = inputTakeBook.value.trim()
+
+			if (bookName === '') {
+				alert('Введите название книги для возврата.')
+				return
+			}
+
+			const isAdded = library.addBook(bookName)
+			if (isAdded) {
+				this.updateBooks()
+				inputTakeBook.value = ''
+			}
+		})
+	}
+}
+
+class Library {
+	constructor() {
+		this.books = [
+			new Book('Война и мир'),
+			new Book('Отцы и дети'),
+			new Book('Вишневый сад'),
+			new Book('1984'),
+			new Book('Преступление и наказание'),
+			new Book('Гордость и предубеждение'),
+			new Book('Мастер и Маргарита'),
+			new Book('Убить пересмешника'),
+			new Book('451 градус по Фаренгейту'),
+			new Book('Анна Каренина'),
+		]
+	}
+
+	getCount() {
+		return this.books.length
+	}
+
+	getBook(index) {
+		return this.books[index]
+	}
+
+	createNumerator() {
+		return new LibraryNumerator(this)
+	}
+
+	removeBook(bookName) {
+		const normalizedBookName = bookName.trim().toLowerCase()
+
+		// Находим индекс книги с учетом нормализации
+		const index = this.books.findIndex(
+			book =>
+				book &&
+				book.name &&
+				book.name.trim().toLowerCase() === normalizedBookName
+		)
+
+		if (index !== -1) {
+			this.books.splice(index, 1) // Удаляем книгу из массива
+			return true
+		}
+		return false
+	}
+
+	addBook(bookName) {
+		const normalizedBookName = bookName.trim()
+
+		// Проверяем, существует ли книга с таким же названием
+		const isAlreadyExists = this.books.some(
+			book =>
+				book.name.trim().toLowerCase() === normalizedBookName.toLowerCase()
+		)
+
+		if (isAlreadyExists) {
+			alert(`Книга "${normalizedBookName}" уже существует в библиотеке.`)
+			return false
+		}
+
+		this.books.push(new Book(normalizedBookName))
+		return true
+	}
+}
+
+class LibraryNumerator {
+	constructor(aggregate) {
+		this.aggregate = aggregate
+		this.index = 0
+	}
+
+	hasNext() {
+		return this.index < this.aggregate.getCount()
+	}
+
+	next() {
+		return this.aggregate.getBook(this.index++)
+	}
+}
+
+// Usage
+const library = new Library()
+const reader = new Reader()
+reader.seeBooks(btnOne)
+reader.takeBook(btnRemove)
+reader.returnBook(btnAddBook)

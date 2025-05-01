@@ -1,0 +1,186 @@
+/* basic presset */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: #777;
+  padding: 3rem;
+}
+
+.balance-widget {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-width: 300px;
+  font-family: Arial, sans-serif;
+}
+
+.text__money-total {
+  font-size: 16px;
+  color: #555;
+}
+
+.text__money-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-top: 5px;
+}
+
+#refreshBalance {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.employes__add-employ {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.employes__add-employ input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn__add-employ {
+  padding: 8px 15px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container__added-employers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.employee-card {
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.balance-widget {
+  margin-top: 30px;
+  padding: 15px;
+  background: #f0f8ff;
+  border-radius: 8px;
+}
+
+.employee-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.employee-card p {
+  margin: 5px 0;
+  color: #34495e;
+}
+
+.employee-card .total-salary {
+  font-weight: bold;
+  color: #27ae60;
+  margin-top: 10px;
+}
+
+.btn__paySalaries {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn__paySalaries:hover {
+  background-color: #45a049;
+}
+
+.btn__paySalaries:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.container__notification {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.container__notification h3 {
+  margin-top: 0;
+  color: #343a40;
+}
+
+.notification-message {
+  padding: 10px;
+  margin: 10px 0;
+  background: white;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.btn__sendNotification {
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #1f3fcb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn__sendNotification:hover {
+  background-color: #007bff;
+}
+
+.btn__sendNotification:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/*# sourceMappingURL=styles.css.map */
