@@ -98,7 +98,7 @@ class Employee {
 
 		// Добавляем контактные данные
 		this.email = email ? new Email(email) : null
-		this.phone = phone ? phone : null // Можно добавить валидацию телефона
+		this.phone = phone ? phone : null
 	}
 
 	// Итоговая зарплата (зарплата + бонус)
@@ -127,7 +127,6 @@ class Management {
 	deposit(amount) {
 		this.accountBalance = this.accountBalance.add(amount)
 		this.updateBalanceUI()
-		// return this.accountBalance
 	}
 
 	updateBalanceUI() {
@@ -166,34 +165,10 @@ class Management {
 			this.employeesContainer.appendChild(employeeElement)
 		})
 	}
-	// renderEmployees() {
-	// 	this.employeesContainer.innerHTML = ''
-	// 	this.employees.forEach(employee => {
-	// 		const employeeElement = document.createElement('div')
-	// 		employeeElement.className = 'employee-card'
-	// 		employeeElement.innerHTML = `
-	//     <h3>${employee.name}</h3>
-	//     <p>Зарплата: ${employee.baseSalary.amount.toFixed(2)} ${
-	// 			employee.baseSalary.currency
-	// 		}</p>
-	//     <p>Бонус: ${employee.bonus.amount.toFixed(2)} ${
-	// 			employee.bonus.currency
-	// 		}
-	//       (${(
-	// 					(employee.bonus.amount / employee.baseSalary.amount) *
-	// 					100
-	// 				).toFixed(1)}%)</p>
-	//     <p class="total-salary">Итого: ${employee.totalSalary.amount.toFixed(
-	// 				2
-	// 			)} ${employee.baseSalary.currency}</p>
-	//   `
-	// 		this.employeesContainer.appendChild(employeeElement)
-	// 	})
-	// }
 
 	// Выплата зарплат всем сотрудникам
 	payOutSalaries() {
-		// Теперь без параметров т.к. 'работаем' с this.employees
+		// без параметров т.к. 'работаем' с this.employees
 		if (!this.employees || this.employees.length === 0) {
 			alert('Нет сотрудников для выплаты!')
 			return
@@ -259,21 +234,21 @@ class Management {
 			if (employee.phone) {
 				const sms = new SMS(
 					employee.phone,
-					message.substring(0, 160) // Ограничение длины SMS
+					message.substring(0, 160) // Ограничение длины смс
 				)
 				this.sentSMS.push(sms)
 			}
 		})
 
-		this.logSentNotifications()
+		// this.logSentNotifications()
 	}
 
-	logSentNotifications() {
-		console.log('Отправленные email:', this.sentEmails)
-		console.log('Отправленные SMS:', this.sentSMS)
-	}
+	// logSentNotifications() {
+	// 	console.log('Отправленные email:', this.sentEmails)
+	// 	console.log('Отправленные SMS:', this.sentSMS)
+	// }
 
-	// Создаем текст уведомления
+	// Текст уведомления
 	createNotificationMessage(employee) {
 		const salary = employee.baseSalary.toString()
 		const bonus = employee.bonus.toString()
@@ -285,7 +260,7 @@ class Management {
 		)
 	}
 
-	// Отображаем уведомление в интерфейсе
+	// Отображение уведомления
 	displayNotification(employee, message) {
 		const notificationElement = document.createElement('div')
 		notificationElement.className = 'notification-message'
@@ -304,22 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	const management = new Management()
 	management.deposit(new Money(10000, 'USD')) // Стартовый баланс
 
-	document.querySelector('.btn__add-employ').addEventListener('click', () => {
-		const nameInput = document.querySelector('input[name="name"]')
-		const salaryInput = document.querySelector('input[name="salary"]')
-
-		if (nameInput.value.trim() && salaryInput.value.trim()) {
-			management.addEmployee(
-				nameInput.value.trim(),
-				parseFloat(salaryInput.value)
-			)
-			nameInput.value = ''
-			salaryInput.value = ''
-		} else {
-			alert('Пожалуйста, заполните все поля!')
-		}
-	})
-
 	// Обработчик кнопки выплаты зарплат
 	document.querySelector('.btn__paySalaries').addEventListener('click', () => {
 		management.payOutSalaries()
@@ -331,33 +290,33 @@ document.addEventListener('DOMContentLoaded', () => {
 		.addEventListener('click', () => {
 			management.sendNotifications()
 		})
-})
 
-// обработчик добавления сотрудника
-document.querySelector('.btn__add-employ').addEventListener('click', () => {
-	const nameInput = document.querySelector('input[name="name"]')
-	const salaryInput = document.querySelector('input[name="salary"]')
-	const emailInput = document.querySelector('input[name="email"]')
-	const phoneInput = document.querySelector('input[name="phone"]')
+	// Единый обработчик добавления сотрудника
+	document.querySelector('.btn__add-employ').addEventListener('click', () => {
+		const nameInput = document.querySelector('input[name="name"]')
+		const salaryInput = document.querySelector('input[name="salary"]')
+		const emailInput = document.querySelector('input[name="email"]')
+		const phoneInput = document.querySelector('input[name="phone"]')
 
-	if (nameInput.value && salaryInput.value) {
-		try {
-			management.addEmployee(
-				nameInput.value.trim(),
-				parseFloat(salaryInput.value),
-				emailInput.value.trim() || null,
-				phoneInput.value.trim() || null
-			)
+		if (nameInput.value.trim() && salaryInput.value.trim()) {
+			try {
+				management.addEmployee(
+					nameInput.value.trim(),
+					parseFloat(salaryInput.value),
+					emailInput?.value.trim() || null,
+					phoneInput?.value.trim() || null
+				)
 
-			// Очищаем поля
-			nameInput.value = ''
-			salaryInput.value = ''
-			emailInput.value = ''
-			phoneInput.value = ''
-		} catch (error) {
-			// alert(`Ошибка: ${error.message}`)
+				// Очищаем ВСЕ поля
+				nameInput.value = ''
+				salaryInput.value = ''
+				if (emailInput) emailInput.value = ''
+				if (phoneInput) phoneInput.value = ''
+			} catch (error) {
+				alert(`Ошибка: ${error.message}`)
+			}
+		} else {
+			alert('Заполните обязательные поля (имя и зарплата)!')
 		}
-	} else {
-		alert('Заполните обязательные поля (имя и зарплата)!')
-	}
+	})
 })
