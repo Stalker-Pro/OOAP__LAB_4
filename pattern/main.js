@@ -46,20 +46,15 @@ class Email {
 	equals(other) {
 		return this._value === other._value
 	}
-
-	// Для удобного создания (альтернатива конструктору)
-	static create(value) {
-		return new Email(value)
-	}
 }
 
 // Дополнительный класс для email-сообщений
 class EmailMessage {
-	constructor(email, subject, body) {
+	constructor(email, textMessage, notificationMessage) {
 		this.email = email
-		this.subject = subject
-		this.body = body
-		this.sentAt = new Date()
+		this.textMessage = textMessage //
+		this.notificationMessage = notificationMessage // текст для уведомления
+		// this.sentAt = new Date()
 	}
 }
 
@@ -89,7 +84,7 @@ class Employee {
 	constructor(name, baseSalary, email = null, phone = null) {
 		this.name = name
 		this.baseSalary = new Money(baseSalary, 'USD')
-		this.id = Date.now().toString()
+		// this.id = Date.now().toString()
 
 		// Генерируем случайный бонус 5-10%
 		const bonusPercent = 5 + Math.random() * 5
@@ -120,7 +115,7 @@ class Management {
 		this.notificationContainer = document.querySelector(
 			'.container__notification-employe'
 		)
-		this.updateBalanceUI() // Инициализируем отображение
+		this.updateBalanceUI() // отображение
 	}
 
 	// Пополнение счёта
