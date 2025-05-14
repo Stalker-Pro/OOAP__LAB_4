@@ -1,7 +1,7 @@
-.btn__paySalaries {
+.btn-f {
 	padding: 10px 20px;
 	margin-top: 20px;
-	background-color: #4CAF50; 
+	background-color: #db8300; 
 	color: white;
 	border: none;
 	border-radius: 4px;
@@ -10,11 +10,12 @@
 	transition: background-color 0.3s;
 }
 
-.btn__paySalaries:hover {
-	background-color: #45a049;
+
+.btn__find-highest-salary:hover {
+	background-color: #ff9900;
 }
 
-.btn__paySalaries:disabled {
+.btn__find-highest-salary:disabled {
 	background-color: #cccccc;
 	cursor: not-allowed;
 }

@@ -144,6 +144,7 @@ class Management {
 		this.employees.forEach(employee => {
 			const employeeElement = document.createElement('div')
 			employeeElement.className = 'employee-card'
+			// employeeElement.dataset.id = employee.id
 
 			let contacts = ''
 			if (employee.email) contacts += `Email: ${employee.email.value}<br>`
@@ -194,6 +195,13 @@ class Management {
 			console.error('Ошибка выплаты:', error)
 			alert(error.message)
 		}
+	}
+
+	findHighestPaidEmployees() {
+		if (this.employees.length === 0) return []
+
+		const maxSalary = Math.max(...this.employees.map(e => e.totalSalary.amount))
+		return this.employees.filter(e => e.totalSalary.amount === maxSalary)
 	}
 
 	calculateTotalSalaries() {
@@ -314,4 +322,28 @@ document.addEventListener('DOMContentLoaded', () => {
 			alert('Заполните обязательные поля (имя и зарплата)!')
 		}
 	})
+
+	//// * ВЫСШАЯ ЗП
+	document
+		.querySelector('.btn__find-highest-salary')
+		.addEventListener('click', () => {
+			// Снимаем все подсветки
+			document.querySelectorAll('.employee-card').forEach(card => {
+				card.classList.remove('highlight')
+			})
+
+			const highestPaidList = management.findHighestPaidEmployees()
+
+			// Подсвечиваем всех сотрудников с максимальной зарплатой
+			highestPaidList.forEach(employee => {
+				const cards = document.querySelectorAll('.employee-card')
+				for (const card of cards) {
+					if (card.textContent.includes(employee.name)) {
+						card.classList.add('highlight')
+						card.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+					}
+				}
+			})
+		})
+	//// * ВЫСШАЯ ЗП
 })

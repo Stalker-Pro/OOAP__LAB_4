@@ -63,3 +63,11 @@
 	color: #27ae60;
 	margin-top: 10px;
 }
+
+// * Подсветка Сотрудника //
+
+.employee-card.highlight {
+	border: 2px solid #ff9800;
+	background-color: #fff8e1;
+	box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+}
